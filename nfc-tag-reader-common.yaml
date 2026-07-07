@@ -1,0 +1,94 @@
+# Define buzzer as output for RTTTL
+rtttl:
+  output: buzzer
+
+# Define the buzzer output
+output:
+  - platform: esp8266_pwm
+    pin: D5
+    id: buzzer
+
+# Configure LED
+light:
+  - platform: neopixelbus
+    variant: WS2812
+    pin: D6
+    num_leds: 1
+    flash_transition_length: 500ms
+    type: GRB
+    id: activity_led
+    name: LED
+    restore_mode: ALWAYS_OFF
+
+# I2C setup
+i2c:
+  sda: D2
+  scl: D1
+  scan: True
+
+# PN532 NFC module configuration
+pn532_i2c:
+  id: pn532_board
+  update_interval: 2s
+  on_tag:
+    then:
+      - lambda: |-
+          // Read UID and log it
+          std::string uid_str;
+          for (auto byte : tag.get_uid()) {
+            char buffer[3];
+            sprintf(buffer, "%02X", byte);  // Hexadecimal format
+            uid_str += buffer;
+            uid_str += "-";
+          }
+          uid_str.pop_back();  // Remove last "-"
+          
+          // Define nfc_uid sensor to hold the UID value
+          id(uid).publish_state(uid_str);  // Save UID in a text sensor
+          ESP_LOGD("pn532", "Tag UID: %s", uid_str.c_str());
+
+      - delay: 1s
+      - lambda: |-
+          id(uid).publish_state("00-00-00");  // Reset UID after 1 second
+          ESP_LOGD("pn532", "Reset UID to 00-00-00");
+
+text_sensor:
+  - platform: template
+    name: "uid"
+    id: uid
+  - platform: homeassistant
+    name: "HA Display Text"
+    id: ha_display_text
+    entity_id: "input_text.${sub_name_safe}_display"  # Dynamic entity ID
+
+# Display configuration
+display:
+  - platform: lcd_pcf8574
+    id: lcd_display
+    dimensions: 20x4
+    address: 0x27
+    update_interval: 0.5s
+    lambda: |-
+      if (id(ha_display_text).state != "") {
+        it.print(0, 0, "");
+        it.print(0, 1, id(ha_display_text).state.c_str());
+      } else {
+        it.print(0, 0, "");
+      }
+# Neustart-Button für Home Assistant
+button:
+  - platform: restart
+    name: "Neustart"
+    icon: "mdi:restart"
+# Diagnosewerte für Home Assistant
+sensor:
+  - platform: uptime
+    name: "Laufzeit"
+    update_interval: 10s
+    entity_category: diagnostic
+
+  - platform: wifi_signal
+    name: "WLAN-Signal"
+    update_interval: 10s
+    entity_category: diagnostic
+
