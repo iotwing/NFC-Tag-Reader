@@ -127,21 +127,8 @@ button:
   - platform: restart
     name: "Neustart"
     icon: "mdi:restart"
-# Diagnosewerte für Home Assistant
-#Laufzeit des Sensors
-sensor:
-  - platform: uptime
-    name: "Laufzeit"
-    update_interval: 10s
-    entity_category: diagnostic
-#Wifi Signalstärke
-  - platform: wifi_signal
-    name: "WLAN-Signal"
-    update_interval: 10s
-    entity_category: diagnostic
-
-
-     - platform: template
+  
+  - platform: template
     name: "LED-Farbtest"
     icon: "mdi:palette"
     on_press:
@@ -218,6 +205,20 @@ sensor:
       # Ausschalten
       - light.turn_off:
           id: activity_led
-          transition_length: 0.1s
+          transition_length: 0.1s   
+# Diagnosewerte für Home Assistant
+#Laufzeit des Sensors
+sensor:
+  - platform: uptime
+    name: "Laufzeit"
+    update_interval: 10s
+    entity_category: diagnostic
+#Wifi Signalstärke
+  - platform: wifi_signal
+    name: "WLAN-Signal"
+    update_interval: 10s
+    entity_category: diagnostic
 
+
+    
 
