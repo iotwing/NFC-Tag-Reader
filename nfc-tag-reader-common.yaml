@@ -80,15 +80,5 @@ button:
   - platform: restart
     name: "Neustart"
     icon: "mdi:restart"
-# Diagnosewerte für Home Assistant
-sensor:
-  - platform: uptime
-    name: "Laufzeit"
-    update_interval: 10s
-    entity_category: diagnostic
 
-  - platform: wifi_signal
-    name: "WLAN-Signal"
-    update_interval: 10s
-    entity_category: diagnostic
 
