@@ -124,6 +124,11 @@ display:
       }
 # Neustart-Button für Home Assistant
 button:
+  - platform: template
+    name: "Buzzer-Test"
+    icon: "mdi:volume-high"
+    on_press:
+      - rtttl.play: "test:d=8,o=5,b=120:c,e,g,c6"
   - platform: restart
     name: "Neustart"
     icon: "mdi:restart"
