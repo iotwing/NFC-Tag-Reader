@@ -59,7 +59,7 @@ output:
 light:
   - platform: neopixelbus
     variant: WS2812
-    pin: D7
+    pin: D5
     num_leds: 1
     flash_transition_length: 500ms
     type: GRB
