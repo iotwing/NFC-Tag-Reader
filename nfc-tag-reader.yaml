@@ -52,14 +52,14 @@ rtttl:
 # Define the buzzer output
 output:
   - platform: esp8266_pwm
-    pin: D5
+    pin: D6
     id: buzzer
 
 # Configure LED
 light:
   - platform: neopixelbus
     variant: WS2812
-    pin: D6
+    pin: D5
     num_leds: 1
     flash_transition_length: 500ms
     type: GRB
