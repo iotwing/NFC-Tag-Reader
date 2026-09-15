@@ -114,7 +114,7 @@ display:
     id: lcd_display
     dimensions: 20x4
     address: 0x27
-    update_interval: 1.5s
+    update_interval: 2s
     lambda: |-
       if (id(ha_display_text).state != "") {
         it.print(0, 0, "");
